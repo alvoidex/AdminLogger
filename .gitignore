@@ -2,8 +2,13 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-bin/
-obj/
+/ConsoleApp1/obj
 /ConsoleApp1/bin/Debug/net10.0
+/.vs/ProjectEvaluation
+/AdminLogger/bin/Debug/net10.0
+/AdminLogger/obj
+/AdminLogger/.vs/AdminLogger.slnx/FileContentIndex
+/AdminLogger/.vs/AdminLogger.slnx/v18
+/AdminLogger/.vs
 /.vs/ConsoleApp1.slnx/v18
-/.vs
+/.vs/ConsoleApp1.slnx
