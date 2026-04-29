@@ -13,7 +13,7 @@ namespace ConsoleApp1
                 Console.WriteLine("Файл не найден");
                 return;
             }
-
+            
             Console.WriteLine("Введите слово для фильтра (error, warn, info или all)");
             string Filter = Console.ReadLine();
 
