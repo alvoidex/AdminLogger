@@ -15,13 +15,13 @@ namespace ConsoleApp1
             }
             
             Console.WriteLine("Введите слово для фильтра (error, warn, info или all)");
-            string Filter = Console.ReadLine();
+            string Filter = Console.ReadLine().Trim().ToLower();
 
             var lines = File.ReadAllLines(path);
-            var filtered = lines.Where(line => Filter == "all" || line.Contains(Filter)).ToList();
+            var filtered = lines.Where(line => Filter == "all" || line.ToLower().Contains(Filter)).ToList();
 
             Console.WriteLine("Результаты:");
-            foreach (var item in lines)
+            foreach (var item in filtered)
             {
                 Console.WriteLine(item);
             }
