@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.Design;
+using System.Linq;
 using System.Threading.Channels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ConsoleApp1
@@ -7,19 +8,12 @@ namespace ConsoleApp1
     {
         static void Main()
         {
-            Console.WriteLine("Введите корректный путь к файлу");
-            bool get_path = Path_Checking(out string? path);
-            string message = get_path == false ? "Введите корректный путь к файлу" :
-                "Введите слово для фильтра (error, warn, info или all)";
-            if (get_path)
+            string? path = null;
+            while (path == null)
             {
-                Console.WriteLine(message);
+                path = GetFilePath();
+            }
                 ViewLog(path);
-            }
-            else
-            {
-                Console.WriteLine(message);
-            }
         }
         static void ViewLog(string path)
         {
@@ -37,17 +31,15 @@ namespace ConsoleApp1
             File.WriteAllLines("report.txt", filtered);
             Console.WriteLine("\nОтчет сохранен в report.txt");
         }
-        static bool Path_Checking(out string? path)
+        static string? GetFilePath()
         {
-            path = Console.ReadLine();
-            if (!File.Exists(path))
+            Console.WriteLine("Введите корректный путь к файлу");
+            string path = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
             {
-                return false;
+                return null;
             }
-            else
-            {
-                return true;
-            }
+            return path;
         }
     }
 }
