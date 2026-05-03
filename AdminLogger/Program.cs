@@ -17,8 +17,9 @@ namespace ConsoleApp1
         }
         static void ViewLog(string path)
         {
+            Console.WriteLine("Введите слово для фильтра (error, warn, info или all");
             string Filter = Console.ReadLine().Trim().ToLower();
-
+            Filter = string.IsNullOrWhiteSpace(Filter) ? "all" : Filter;
             var lines = File.ReadAllLines(path);
             var filtered = lines.Where(line => Filter == "all" || line.ToLower().Contains(Filter)).ToList();
 
