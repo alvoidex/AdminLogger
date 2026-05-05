@@ -17,12 +17,7 @@ namespace ConsoleApp1
         }
         static void ViewLog(string path)
         {
-            Console.WriteLine("Введите слово для фильтра (error, warn, info или all");
-            string Filter = Console.ReadLine().Trim().ToLower();
-            Filter = string.IsNullOrWhiteSpace(Filter) ? "all" : Filter;
-            var lines = File.ReadAllLines(path);
-            var filtered = lines.Where(line => Filter == "all" || line.ToLower().Contains(Filter)).ToList();
-
+            List<string> filtered = ReadLog(path);
             Console.WriteLine("Результаты:");
             foreach (var item in filtered)
             {
@@ -30,7 +25,16 @@ namespace ConsoleApp1
             }
 
             File.WriteAllLines("report.txt", filtered);
-            Console.WriteLine("\nОтчет сохранен в report.txt");
+            Console.WriteLine("Отчет сохранен в report.txt в папке с программой");
+        }
+        static List<string> ReadLog(string path)
+        {
+            Console.WriteLine("Введите любое слово для фильтра (error, warn, info или all");
+            string Filter = Console.ReadLine().Trim().ToLower();
+            Filter = string.IsNullOrWhiteSpace(Filter) ? "all" : Filter;
+            var lines = File.ReadAllLines(path);
+            var filtered = lines.Where(line => Filter == "all" || line.ToLower().Contains(Filter)).ToList();
+            return filtered;
         }
         static string? GetFilePath()
         {
