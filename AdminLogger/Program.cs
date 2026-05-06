@@ -10,6 +10,7 @@ namespace ConsoleApp1
     {
         static void Main()
         {
+            Console.WriteLine(new string('═', 62));
             while (true)
             {
 
@@ -25,38 +26,35 @@ namespace ConsoleApp1
         {
             while (true)
             {
-                List<string> filtered = ReadLog(path);
-                if (filtered == null)
-                    return;
-                Console.WriteLine("Результаты:");
+                var result = ReadLog(path);
+                if (result == null) return;
+                var (filtered, Filter) = result.Value;
+                //if (filtered == null) return;
+                Console.WriteLine(new string('═', 14)+"\n3 | РЕЗУЛЬТАТЫ:");
                 foreach (var item in filtered)
                 {
                     Console.WriteLine(item);
                 }
                 File.WriteAllLines("report.txt", filtered);
-                Console.WriteLine("══════════════════════════════════════════════════\n" +
-                "√ Отчет сохранен в report.txt в папке с программой");
+                Console.WriteLine(new string('-', 79) + $"\n > Поиск: {Filter} | Строк найдено: {filtered.Count} | Время {DateTime.Now:T} | Файл: {path}".PadLeft(10));
+                Console.WriteLine("\n4 | Отчет сохранен в report.txt в папке с программой");
             }
         }
-        static List<string>? ReadLog(string path)
+        static (List<string>, string Filter)? ReadLog(string path)
         {
-            Console.WriteLine("═════════════════════════════════════════════════════════════════════════════\n► Введите любое слово для фильтра (пример: error, warn или 0 для нового файла)");
+            Console.WriteLine(new string('═',79)+ "\n2 | Введите любое слово для фильтра (пример: error, warn или 0 для нового файла)");
             string? Filter = Console.ReadLine()?.Trim().ToLower();
-            if (Filter == "0")
-                return null;
+            if (Filter == "0") return null;
             Filter = string.IsNullOrWhiteSpace(Filter) ? "all" : Filter;
             var lines = File.ReadAllLines(path);
-            return lines.Where(line => Filter == "all" || line.ToLower().Contains(Filter)).ToList();
+            var Filtered = lines.Where(line => Filter == "all" || line.ToLower().Contains(Filter)).ToList();
+            return (Filtered, Filter);
         }
         static string? GetFilePath()
         {
-            Console.WriteLine("> Введите корректный путь к файлу или перетащите файл в окно\n════════════════════════════════════════════════════════════");
+            Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n"+ new string('═', 62));
             string path = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-            {
-                return null;
-            }
-            return path;
+            return string.IsNullOrWhiteSpace(path) || !File.Exists(path) ? null : path;
         }
     }
 }
