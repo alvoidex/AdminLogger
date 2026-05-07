@@ -35,9 +35,11 @@ namespace ConsoleApp1
                 {
                     Console.WriteLine(item);
                 }
-                File.WriteAllLines("report.txt", filtered);
-                Console.WriteLine(new string('-', 79) + $"\n > Поиск: {Filter} | Строк найдено: {filtered.Count} | Время {DateTime.Now:T} | Файл: {path}".PadLeft(10));
-                Console.WriteLine("\n4 | Отчет сохранен в report.txt в папке с программой");
+                string status = $"Поиск: {Filter} | Найдено: {filtered.Count} строк | Время {DateTime.Now:T} | Исходный файл: {path}";
+                filtered.Insert(0, string.Join(' ', "🔎 " + status+"\n"));
+                File.WriteAllLines("rep_log.txt", filtered);
+                Console.WriteLine(new string('-', 79) + $"\n -> {status}\n" + new string('-', 79));
+                Console.WriteLine($"4 | Отчет сохранен в rep_log.txt в папке с программой:\n{Path.GetFullPath("rep_log.txt")}\n" + new string(':', 79));
             }
         }
         static (List<string>, string Filter)? ReadLog(string path)
