@@ -14,10 +14,10 @@ namespace ConsoleApp1
             while (true)
             {
 
-                string? path = null;
-                while (path == null)
+                string? path = GetFilePath();
+                if (path == null)
                 {
-                    path = GetFilePath();
+                    continue;
                 }
                 ViewLog(path);
             }
@@ -29,14 +29,13 @@ namespace ConsoleApp1
                 var result = ReadLog(path);
                 if (result == null) return;
                 var (filtered, Filter) = result.Value;
-                //if (filtered == null) return;
                 Console.WriteLine(new string('═', 14)+"\n3 | РЕЗУЛЬТАТЫ:");
                 foreach (var item in filtered)
                 {
                     Console.WriteLine(item);
                 }
                 string status = $"Поиск: {Filter} | Найдено: {filtered.Count} строк | Время {DateTime.Now:T} | Исходный файл: {path}";
-                filtered.Insert(0, string.Join(' ', "🔎 " + status+"\n"));
+                filtered.Insert(0, $"🔎 {status}\n");
                 File.WriteAllLines("rep_log.txt", filtered);
                 Console.WriteLine(new string('-', 79) + $"\n -> {status}\n" + new string('-', 79));
                 Console.WriteLine($"4 | Отчет сохранен в rep_log.txt в папке с программой:\n{Path.GetFullPath("rep_log.txt")}\n" + new string(':', 79));
@@ -55,7 +54,7 @@ namespace ConsoleApp1
         static string? GetFilePath()
         {
             Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n"+ new string('═', 62));
-            string path = Console.ReadLine();
+            string? path = Console.ReadLine()?.Trim().Trim('"');
             return string.IsNullOrWhiteSpace(path) || !File.Exists(path) ? null : path;
         }
     }
