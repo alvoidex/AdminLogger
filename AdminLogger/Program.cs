@@ -29,16 +29,20 @@ namespace ConsoleApp1
                 var result = ReadLog(path);
                 if (result == null) return;
                 var (filtered, Filter) = result.Value;
-                Console.WriteLine(new string('═', 14)+"\n3 | РЕЗУЛЬТАТЫ:");
-                foreach (var item in filtered)
-                {
-                    Console.WriteLine(item);
-                }
+                PrintResults(filtered);
                 string status = $"Поиск: {Filter} | Найдено: {filtered.Count} строк | Время {DateTime.Now:T} | Исходный файл: {path}";
                 filtered.Insert(0, $"🔎 {status}\n");
                 File.WriteAllLines("rep_log.txt", filtered);
                 Console.WriteLine(new string('-', 79) + $"\n -> {status}\n" + new string('-', 79));
                 Console.WriteLine($"4 | Отчет сохранен в rep_log.txt в папке с программой:\n{Path.GetFullPath("rep_log.txt")}\n" + new string(':', 79));
+            }
+        }
+        static void PrintResults(List<string> Lines)
+        {
+            Console.WriteLine(new string('═', 14) + "\n3 | РЕЗУЛЬТАТЫ:");
+            foreach (var item in Lines)
+            {
+                Console.WriteLine(item);
             }
         }
         static (List<string>, string Filter)? ReadLog(string path)
