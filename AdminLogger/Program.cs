@@ -8,6 +8,13 @@ namespace ConsoleApp1
 {
     internal class Program
     {
+        enum MessageType
+        {
+            Path,
+            Filter,
+            Result,
+            FullPath
+        }
         static void Main()
         {
             Console.WriteLine(new string('═', 62));
@@ -34,12 +41,12 @@ namespace ConsoleApp1
                 filtered.Insert(0, $"🔎 {status}\n");
                 File.WriteAllLines("rep_log.txt", filtered);
                 Console.WriteLine(new string('-', 79) + $"\n -> {status}\n" + new string('-', 79));
-                Console.WriteLine($"4 | Отчет сохранен в rep_log.txt в папке с программой:\n{Path.GetFullPath("rep_log.txt")}\n" + new string(':', 79));
+                Messages(MessageType.FullPath);
             }
         }
         static void PrintResults(List<string> Lines)
         {
-            Console.WriteLine(new string('═', 14) + "\n3 | РЕЗУЛЬТАТЫ:");
+            Messages(MessageType.Result);
             foreach (var item in Lines)
             {
                 Console.WriteLine(item);
@@ -47,7 +54,7 @@ namespace ConsoleApp1
         }
         static (List<string>, string Filter)? ReadLog(string path)
         {
-            Console.WriteLine(new string('═',79)+ "\n2 | Введите любое слово для фильтра (пример: error, warn или 0 для нового файла)");
+            Messages(MessageType.Filter);
             string? Filter = Console.ReadLine()?.Trim().ToLower();
             if (Filter == "0") return null;
             Filter = string.IsNullOrWhiteSpace(Filter) ? "all" : Filter;
@@ -57,9 +64,30 @@ namespace ConsoleApp1
         }
         static string? GetFilePath()
         {
-            Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n"+ new string('═', 62));
+            Messages(MessageType.Path);
             string? path = Console.ReadLine()?.Trim().Trim('"');
             return string.IsNullOrWhiteSpace(path) || !File.Exists(path) ? null : path;
+        }
+        static void Messages(MessageType type, string? rep = "rep_log.txt")
+        {
+            switch (type)
+            {
+                case MessageType.Path:
+                    Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n" + new string('═', 62));
+                    break;
+                case MessageType.Filter:
+                    Console.WriteLine(new string('═', 79) + "\n2 | Введите любое слово для фильтра (пример: error, warn или 0 для нового файла)");
+                    break;
+                case MessageType.Result:
+                    Console.WriteLine(new string('═', 14) + "\n3 | РЕЗУЛЬТАТЫ:");
+                    break;
+                case MessageType.FullPath:
+                    Console.WriteLine($"4 | Отчет сохранен в rep_log.txt в папке с программой:\n{Path.GetFullPath(rep)}\n" + new string(':', 79));
+                    break;
+                default:
+                    Console.WriteLine();
+                    break;
+            }
         }
     }
 }
