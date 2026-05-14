@@ -12,84 +12,84 @@ namespace ConsoleApp1
     {
         enum MessageType
         {
-            Path,
-            Filter,
-            Result,
-            FullPath
+            SrcPath,
+            FilterWord,
+            OutLog,
+            ResltPath
         }
-        const string RepFile = "rep_log.txt";
+        const string OutLog = "rep_log.txt";
         static void Main()
         {
             Console.WriteLine(new string('═', 62));
             while (true)
             {
-                string? path = GetFilePath();
-                if (path == null) continue;
+                string? src_path = GetFilePath();
+                if (src_path == null) continue;
 
-                ViewLog(path);
+                ViewLog(src_path);
             }
         }
-        static void ViewLog(string path)
+        static void ViewLog(string src_path)
         {
             while (true)
             {
-                var result = ReadLog(path);
+                var result = ReadLog(src_path);
                 if (result == null) return;
 
-                var (filtered, filter_word) = result.Value;
+                var (filtered_lines, filter_word) = result.Value;
 
-                PrintResults(filtered);
-                string status = BuildStatus(filter_word, filtered, path);
-                filtered.Insert(0, $"🔎 {status}\n");
+                PrintResults(filtered_lines);
+                string status = BuildStatus(filter_word, filtered_lines, src_path);
+                filtered_lines.Insert(0, $"🔎 {status}\n");
 
-                File.WriteAllLines(RepFile, filtered);
+                File.WriteAllLines(OutLog, filtered_lines);
                 Console.WriteLine(new string(':', 79) + $"\n -> {status}\n" + new string(':', 79));
-                Messages(MessageType.FullPath);
+                Messages(MessageType.ResltPath);
             }
         }
-        static string BuildStatus(string filter, List<string> filtered, string path)
+        static string BuildStatus(string filter_word, List<string> filtered_lines, string src_path)
         {
-            return $"Поиск: {filter} | Найдено: {filtered.Count} строк | Время {DateTime.Now:T} | Исходный файл: {path}";
+            return $"Поиск: {filter_word} | Найдено: {filtered_lines.Count} строк | Время {DateTime.Now:T} | Исходный файл: {src_path}";
         }
         static void PrintResults(List<string> lines)
         {
-            Messages(MessageType.Result);
+            Messages(MessageType.OutLog);
             foreach (var item in lines)
             {
                 Console.WriteLine(item);
             }
         }
-        static (List<string>, string Filter)? ReadLog(string path)
+        static (List<string>, string Filter)? ReadLog(string src_path)
         {
-            Messages(MessageType.Filter);
-            var lines = File.ReadAllLines(path);
+            Messages(MessageType.FilterWord);
+            var raw_lines = File.ReadAllLines(src_path);
             string? filter_word = Console.ReadLine()?.Trim().ToLower();
             if (filter_word == "0") return null;
             filter_word = string.IsNullOrWhiteSpace(filter_word) ? "all" : filter_word;
-            var Filtered = lines.Where(line => filter_word == "all" || line.ToLower().Contains(filter_word)).ToList();
-            return (Filtered, filter_word);
+            var filtered_lines = raw_lines.Where(line => filter_word == "all" || line.ToLower().Contains(filter_word)).ToList();
+            return (filtered_lines, filter_word);
         }
         static string? GetFilePath()
         {
-            Messages(MessageType.Path);
-            string? path = Console.ReadLine()?.Trim().Trim('"');
-            return string.IsNullOrWhiteSpace(path) || !File.Exists(path) ? null : path;
+            Messages(MessageType.SrcPath);
+            string? src_path = Console.ReadLine()?.Trim().Trim('"');
+            return string.IsNullOrWhiteSpace(src_path) || !File.Exists(src_path) ? null : src_path;
         }
-        static void Messages(MessageType type, string? rep = RepFile)
+        static void Messages(MessageType type, string? rep = OutLog)
         {
             switch (type)
             {
-                case MessageType.Path:
+                case MessageType.SrcPath:
                     Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n" + new string('═', 62));
                    break;
-                case MessageType.Filter:
+                case MessageType.FilterWord:
                     Console.WriteLine(new string('═', 79) + "\n2 | Введите любое слово для фильтра (пример: error, warn или 0 для нового файла)");
                     break;
-                case MessageType.Result:
+                case MessageType.OutLog:
                     Console.WriteLine(new string('═', 14) + "\n3 | РЕЗУЛЬТАТЫ:");
                     break;
-                case MessageType.FullPath:
-                    Console.WriteLine($"4 | Отчет сохранен в {RepFile} в папке с программой:\n{Path.GetFullPath(rep)}");
+                case MessageType.ResltPath:
+                    Console.WriteLine($"4 | Отчет сохранен в {OutLog} в папке с программой:\n{Path.GetFullPath(rep)}");
                     break;
                 default:
                     Console.WriteLine();
