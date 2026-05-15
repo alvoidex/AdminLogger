@@ -20,9 +20,9 @@ namespace ConsoleApp1
         const string OutLog = "rep_log.txt";
         static void Main()
         {
-            Console.WriteLine(new string('═', 62));
             while (true)
             {
+                Console.WriteLine(new string('═', 62));
                 string? src_path = GetFilePath();
                 if (src_path == null) continue;
 
@@ -43,13 +43,14 @@ namespace ConsoleApp1
                 filtered_lines.Insert(0, $"🔎 {status}\n");
 
                 File.WriteAllLines(OutLog, filtered_lines);
-                Console.WriteLine(new string(':', 79) + $"\n -> {status}\n" + new string(':', 79));
+                Console.WriteLine(new string('-', 79) + $"\n -> {status}\n" + new string('-', 79));
                 Messages(MessageType.ResltPath);
             }
         }
         static string BuildStatus(string filter_word, List<string> filtered_lines, string src_path)
         {
             return $"Поиск: {filter_word} | Найдено: {filtered_lines.Count} строк | Время {DateTime.Now:T} | Исходный файл: {src_path}";
+            ;
         }
         static void PrintResults(List<string> lines)
         {
@@ -64,7 +65,8 @@ namespace ConsoleApp1
             Messages(MessageType.FilterWord);
             var raw_lines = File.ReadAllLines(src_path);
             string? filter_word = Console.ReadLine()?.Trim().ToLower();
-            if (filter_word == "0") return null;
+            if (filter_word == "0")
+            { Console.Clear(); return null; }
             filter_word = string.IsNullOrWhiteSpace(filter_word) ? "all" : filter_word;
             var filtered_lines = raw_lines.Where(line => filter_word == "all" || line.ToLower().Contains(filter_word)).ToList();
             return (filtered_lines, filter_word);
