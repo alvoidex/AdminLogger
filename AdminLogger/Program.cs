@@ -12,17 +12,19 @@ namespace ConsoleApp1
     {
         enum MessageType
         {
+            Intro,
             SrcPath,
             FilterWord,
             OutLog,
             ResltPath
         }
         const string OutLog = "rep_log.txt";
+        static readonly string decorline = new string('─', 64);
         static void Main()
         {
             while (true)
             {
-                Console.WriteLine(new string('═', 62));
+                Messages(MessageType.Intro);
                 string? src_path = GetFilePath();
                 if (src_path == null) continue;
 
@@ -43,7 +45,7 @@ namespace ConsoleApp1
                 filtered_lines.Insert(0, $"🔎 {status}\n");
 
                 File.WriteAllLines(OutLog, filtered_lines);
-                Console.WriteLine(new string('-', 79) + $"\n -> {status}\n" + new string('-', 79));
+                Console.WriteLine(decorline + $"\n -> {status}\n" + decorline);
                 Messages(MessageType.ResltPath);
             }
         }
@@ -81,14 +83,17 @@ namespace ConsoleApp1
         {
             switch (type)
             {
+                case MessageType.Intro:
+                    Console.WriteLine("┌──────────────────────── ADMIN LOGGER ────────────────────────┐");
+                    break;
                 case MessageType.SrcPath:
-                    Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n" + new string('═', 62));
+                    Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n" + decorline);
                    break;
                 case MessageType.FilterWord:
-                    Console.WriteLine(new string('═', 79) + "\n2 | Введите любое слово для фильтра (пример: error, warn или 0 для нового файла)");
+                    Console.WriteLine(decorline + "\n2 | Введите любое слово для фильтра (пример: error, warn или 0 для нового файла)");
                     break;
                 case MessageType.OutLog:
-                    Console.WriteLine(new string('═', 14) + "\n3 | РЕЗУЛЬТАТЫ:");
+                    Console.WriteLine(decorline + "\n3 | РЕЗУЛЬТАТЫ:");
                     break;
                 case MessageType.ResltPath:
                     Console.WriteLine($"4 | Отчет сохранен в {OutLog} в папке с программой:\n{Path.GetFullPath(rep)}");
