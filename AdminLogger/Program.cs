@@ -15,8 +15,7 @@ namespace ConsoleApp1
             Intro,
             SrcPath,
             FilterWord,
-            OutLog,
-            ResltPath
+            OutLog
         }
         const string OutLog = "rep_log.txt";
         static readonly string decorline = new string('─', 64);
@@ -45,14 +44,12 @@ namespace ConsoleApp1
                 filtered_lines.Insert(0, $"🔎 {status}\n");
 
                 File.WriteAllLines(OutLog, filtered_lines);
-                Console.WriteLine(decorline + $"\n -> {status}\n" + decorline);
-                Messages(MessageType.ResltPath);
+                Console.WriteLine(decorline + $"\n -> {status}");
             }
         }
         static string BuildStatus(string filter_word, List<string> filtered_lines, string src_path)
         {
-            return $"Поиск: {filter_word} | Найдено: {filtered_lines.Count} строк | Время {DateTime.Now:T} | Исходный файл: {src_path}";
-            ;
+            return $"Поиск: {filter_word} | Найдено: {filtered_lines.Count} строк | Время {DateTime.Now:T}\n{new string('-', 64)}\nИсходный файл:\n{src_path}\nОтчет сохранен в {OutLog} в папке с программой:\n{Path.GetFullPath(OutLog)}";
         }
         static void PrintResults(List<string> lines)
         {
@@ -94,9 +91,6 @@ namespace ConsoleApp1
                     break;
                 case MessageType.OutLog:
                     Console.WriteLine(decorline + "\n3 | РЕЗУЛЬТАТЫ:");
-                    break;
-                case MessageType.ResltPath:
-                    Console.WriteLine($"4 | Отчет сохранен в {OutLog} в папке с программой:\n{Path.GetFullPath(rep)}");
                     break;
                 default:
                     Console.WriteLine();
