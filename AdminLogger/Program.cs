@@ -44,7 +44,7 @@ namespace ConsoleApp1
                 filtered_lines.Insert(0, $"🔎 {status}\n");
 
                 File.WriteAllLines(OutLog, filtered_lines);
-                Console.WriteLine(decorline + $"\n -> {status}");
+                Console.WriteLine(new string('-', 64) + $"\n -> {status}");
             }
         }
         static string BuildStatus(string filter_word, List<string> filtered_lines, string src_path)
@@ -84,7 +84,7 @@ namespace ConsoleApp1
                     Console.WriteLine("┌──────────────────────── ADMIN LOGGER ────────────────────────┐");
                     break;
                 case MessageType.SrcPath:
-                    Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n" + decorline);
+                    Console.WriteLine("1 | Введите корректный путь к файлу или перетащите файл в окно\n" + new string('-', 64));
                    break;
                 case MessageType.FilterWord:
                     Console.WriteLine(decorline + "\n2 | Введите любое слово для фильтра (пример: error, warn или 0 для нового файла)");
