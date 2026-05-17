@@ -15,4 +15,5 @@ Workflow:
 4. Report saved automatically
 
 Screenshot:
-![Main screen](Screenshots/main.png)
+![Main screen](Screenshots/start.jpg)
+![Main screen](Screenshots/end.jpg)

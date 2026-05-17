@@ -44,12 +44,14 @@ namespace ConsoleApp1
                 filtered_lines.Insert(0, $"🔎 {status}\n");
 
                 File.WriteAllLines(OutLog, filtered_lines);
-                Console.WriteLine(new string('-', 64) + $"\n -> {status}");
+                Console.WriteLine(new string('-', 83) + $"\n -> {status}");
             }
         }
         static string BuildStatus(string filter_word, List<string> filtered_lines, string src_path)
         {
-            return $"Поиск: {filter_word} | Найдено: {filtered_lines.Count} строк | Время {DateTime.Now:T}\n{new string('-', 64)}\nИсходный файл:\n{src_path}\nОтчет сохранен в {OutLog} в папке с программой:\n{Path.GetFullPath(OutLog)}";
+            int errorCount = filtered_lines.Count(line => line.ToLower().Contains("error"));
+            int warningCount = filtered_lines.Count(line => line.ToLower().Contains("warn"));
+            return $"Поиск: {filter_word} | Время {DateTime.Now:T} | Найдено: {filtered_lines.Count} строк | Ошибок {errorCount} | Предупреждений {warningCount}\n{new string('-', 83)}\nИсходный файл:\n{src_path}\nОтчет сохранен в {OutLog} в папке с программой:\n{Path.GetFullPath(OutLog)}";
         }
         static void PrintResults(List<string> lines)
         {
